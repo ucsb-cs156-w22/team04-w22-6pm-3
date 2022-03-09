@@ -112,16 +112,17 @@ public class CommonsController extends ApiController {
       return ResponseEntity.ok().body(body);
     }
 
+    Commons joinedCommons = commonsRepository.findById(commonsId).orElseThrow( ()->new EntityNotFoundException(Commons.class, commonsId));
+    String body = mapper.writeValueAsString(joinedCommons);
+
     UserCommons uc = UserCommons.builder()
         .commonsId(commonsId)
         .userId(userId)
-        .totalWealth(0)
+        .totalWealth(joinedCommons.getStartingBalance())
         .build();
 
     userCommonsRepository.save(uc);
 
-    Commons joinedCommons = commonsRepository.findById(commonsId).orElseThrow( ()->new EntityNotFoundException(Commons.class, commonsId));
-    String body = mapper.writeValueAsString(joinedCommons);
     return ResponseEntity.ok().body(body);
   }
 
