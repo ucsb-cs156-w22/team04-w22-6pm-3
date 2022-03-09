@@ -50,8 +50,9 @@ export default function PlayPage() {
     const objectToAxiosParams = (newUserCommons) => ({
       url: "/api/usercommons/buy",
       method: "PUT",
+      data: newUserCommons,
       params: {
-        userCommons: newUserCommons
+        id: commonsId
       }
     });
   

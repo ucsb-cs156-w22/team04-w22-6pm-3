@@ -74,7 +74,7 @@ public class UserCommonsController extends ApiController {
   }
 
   @ApiOperation(value = "Buy/sell a cow, totalWealth updated")
-  // @PreAuthorize("hasRole('ROLE_USER')")
+  @PreAuthorize("hasRole('ROLE_USER')")
   // @PreAuthorize("hasRole('ROLE_ADMIN')")
   @PutMapping("/buy")
   public ResponseEntity<String> putUserCommonsById(
