@@ -66,17 +66,3 @@ export default function AdminEditCommonsPage() {
       </BasicLayout>
     )
 }
-
-/*
-    return (
-      <BasicLayout>
-        <div className="pt-2">
-          <h1>Edit Commons</h1>
-          <p>
-            This is where the edit page will go
-          </p>
-        </div>
-      </BasicLayout>
-    )
-  }
-  */
