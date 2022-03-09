@@ -39,27 +39,27 @@ export default function CommonsTable({ commons, currentUser }) {
         },
         {
             Header:'day',
-            accesor:'day',
+            accessor:'day',
         },
         {
             Header:'startDate',
-            accesor:'startDate',
+            accessor:'startDate',
         },
         {
             Header:'endDate',
-            accesor:'endDate',
+            accessor:'endDate',
         },
         {
             Header:'totalPlayers',
-            accesor:'totalPlayers',
+            accessor:'totalPlayers',
         },
         {
             Header:'cowPrice',
-            accesor:'cowPrice',
+            accessor:'cowPrice',
         },
         {
             Header:'milkPrice',
-            accesor:'milkPrice',
+            accessor:'milkPrice',
         },
     ];
 
@@ -68,13 +68,11 @@ export default function CommonsTable({ commons, currentUser }) {
         columns.push(ButtonColumn("Delete", "danger", deleteCallback, "CommonsTable"));
     } 
 
-    // Stryker disable next-line ArrayDeclaration : [columns] is a performance optimization
-    const memoizedColumns = React.useMemo(() => columns, [columns]);
-    const memoizedCommons = React.useMemo(() => commons, [commons]);
+    
 
     return <OurTable
-        data={memoizedCommons}
-        columns={memoizedColumns}
+        data={commons}
+        columns={columns}
         testid={"CommonsTable"}
     />;
 };
