@@ -1,5 +1,5 @@
 import { fireEvent, render, waitFor } from "@testing-library/react";
-import { commonsFixtures } from "fixtures/commonsFixtures";
+import commonsFixtures from "fixtures/commonsFixtures";
 import CommonsTable from "main/components/Commons/CommonsTable"
 import { QueryClient, QueryClientProvider } from "react-query";
 import { MemoryRouter } from "react-router-dom";
@@ -55,7 +55,7 @@ describe("UserTable tests", () => {
     );
   });
 
-  test("Has the expected colum headers and content for adminUser", () => {
+  test("Has the expected column headers and content for adminUser", () => {
 
     const currentUser = currentUserFixtures.adminUser;
 
@@ -82,8 +82,8 @@ describe("UserTable tests", () => {
       expect(header).toBeInTheDocument();
     });
 
-    expect(getByTestId(`${testId}-cell-row-0-col-id`)).toHaveTextContent("1");
-    expect(getByTestId(`${testId}-cell-row-1-col-id`)).toHaveTextContent("2");
+    expect(getByTestId(`${testId}-cell-row-0-col-id`)).toHaveTextContent("5");
+    expect(getByTestId(`${testId}-cell-row-1-col-id`)).toHaveTextContent("4");
 
     const editButton = getByTestId(`${testId}-cell-row-0-col-Edit-button`);
     expect(editButton).toBeInTheDocument();
@@ -108,9 +108,9 @@ describe("UserTable tests", () => {
 
     );
 
-    await waitFor(() => { expect(getByTestId(`CommonsTable-cell-row-0-col-id`)).toHaveTextContent("1"); });
+    await waitFor(() => { expect(getByTestId(`CommonsTable-cell-row-0-col-id`)).toHaveTextContent("5"); });
 
-    const editButton = getByTestId(`Commons-cell-row-0-col-Edit-button`);
+    const editButton = getByTestId(`CommonsTable-cell-row-0-col-Edit-button`);
     expect(editButton).toBeInTheDocument();
     
     const deleteButton = getByTestId(`CommonsTable-cell-row-0-col-Delete-button`);
@@ -119,7 +119,7 @@ describe("UserTable tests", () => {
     fireEvent.click(editButton);
     fireEvent.click(deleteButton);
 
-    await waitFor(() => expect(mockedNavigate).toHaveBeenCalledWith('/commons/edit/1'));
+    await waitFor(() => expect(mockedNavigate).toHaveBeenCalledWith('/commons/edit/5'));
 
   });
 
