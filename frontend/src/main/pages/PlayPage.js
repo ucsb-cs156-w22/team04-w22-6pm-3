@@ -47,7 +47,7 @@ export default function PlayPage() {
       toast(`Cow bought! - id: ${commons.id} name: ${commons.name}`);
   }
 
-    const objectToAxiosParams = (newUserCommons) => ({
+    const objectToAxiosParamsBuy = (newUserCommons) => ({
       url: "/api/usercommons/buy",
       method: "PUT",
       data: newUserCommons,
@@ -56,20 +56,45 @@ export default function PlayPage() {
       }
     });
   
-    const mutation = useBackendMutation(
-      objectToAxiosParams,
+    const mutationbuy = useBackendMutation(
+      objectToAxiosParamsBuy,
       { onSuccessBuy },
       // Stryker disable next-line all : hard to set up test for caching
       ["/api/usercommons"]
     );
  
   const onBuy = (userCommons) => { 
-    mutation.mutate(userCommons)
+    mutationbuy.mutate(userCommons)
     //userCommons.totalWealth = userCommons.totalWealth - commons.cowPrice;
     console.log("onBuy called:", userCommons); 
   };
+
+
+
+
+  const onSuccessSell = (commons) => {
+    toast(`Cow sold! - id: ${commons.id} name: ${commons.name}`);
+}
+
+  const objectToAxiosParamsSell = (newUserCommons) => ({
+    url: "/api/usercommons/sell",
+    method: "PUT",
+    data: newUserCommons,
+    params: {
+      id: commonsId
+    }
+  });
+
+
+  const mutationsell = useBackendMutation(
+    objectToAxiosParamsSell,
+    { onSuccessSell },
+    // Stryker disable next-line all : hard to set up test for caching
+    ["/api/usercommons"]
+  );  
   
   const onSell = (userCommons) => { 
+    mutationsell.mutate(userCommons)
     console.log("onSell called:", userCommons);
   };
 
