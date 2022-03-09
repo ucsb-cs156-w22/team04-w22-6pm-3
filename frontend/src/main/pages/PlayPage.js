@@ -11,7 +11,6 @@ import Profits from "main/components/Commons/Profits";
 import { useBackend } from "main/utils/useBackend";
 import { useBackendMutation } from "main/utils/useBackend";
 
-
 export default function PlayPage() {
 
   const { commonsId } = useParams();
@@ -60,12 +59,11 @@ export default function PlayPage() {
       objectToAxiosParamsBuy,
       { onSuccessBuy },
       // Stryker disable next-line all : hard to set up test for caching
-      ["/api/usercommons"]
+      [`/api/usercommons/forcurrentuser?commonsId=${commonsId}`]
     );
  
   const onBuy = (userCommons) => { 
     mutationbuy.mutate(userCommons)
-    //userCommons.totalWealth = userCommons.totalWealth - commons.cowPrice;
     console.log("onBuy called:", userCommons); 
   };
 
@@ -85,18 +83,17 @@ export default function PlayPage() {
     }
   });
 
-
   const mutationsell = useBackendMutation(
     objectToAxiosParamsSell,
     { onSuccessSell },
     // Stryker disable next-line all : hard to set up test for caching
-    ["/api/usercommons"]
-  );  
-  
-  const onSell = (userCommons) => { 
-    mutationsell.mutate(userCommons)
-    console.log("onSell called:", userCommons);
-  };
+    [`/api/usercommons/forcurrentuser?commonsId=${commonsId}`]
+  );
+
+const onSell = (userCommons) => { 
+  mutationsell.mutate(userCommons)
+  console.log("onSell called:", userCommons); 
+};
 
   return (
     

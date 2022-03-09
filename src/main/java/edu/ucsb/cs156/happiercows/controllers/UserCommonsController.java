@@ -75,7 +75,6 @@ public class UserCommonsController extends ApiController {
 
   @ApiOperation(value = "Buy a cow, totalWealth updated")
   @PreAuthorize("hasRole('ROLE_USER')")
-  // @PreAuthorize("hasRole('ROLE_ADMIN')")
   @PutMapping("/buy")
   public ResponseEntity<String> putUserCommonsById(
           @ApiParam("commonsId") @RequestParam Long id, 
@@ -104,30 +103,29 @@ public class UserCommonsController extends ApiController {
 
 
 
-  // @ApiOperation(value = "Sell a cow, totalWealth updated")
-  // @PreAuthorize("hasRole('ROLE_USER')")
-  // // @PreAuthorize("hasRole('ROLE_ADMIN')")
-  // @PutMapping("/sell")
-  // public ResponseEntity<String> putUserCommonsById(
-  //         @ApiParam("commonsId") @RequestParam Long id, 
-  //           @RequestBody @Valid UserCommons incomingUserCommons) throws JsonProcessingException {
-  //       User u = getCurrentUser().getUser();
-  //       Long userId = u.getId();
-  //       UserCommons userCommons = userCommonsRepository.findByCommonsIdAndUserId(id, userId)
-  //       .orElseThrow(
-  //           () -> new EntityNotFoundException(UserCommons.class, "commonsId", id, "userId", userId));
+  @ApiOperation(value = "Sell a cow, totalWealth updated")
+  @PreAuthorize("hasRole('ROLE_USER')")
+  @PutMapping("/sell")
+  public ResponseEntity<String> putUserCommonsById(
+          @ApiParam("commonsId") @RequestParam Long id, 
+            @RequestBody @Valid UserCommons incomingUserCommons) throws JsonProcessingException {
+        User u = getCurrentUser().getUser();
+        Long userId = u.getId();
+        UserCommons userCommons = userCommonsRepository.findByCommonsIdAndUserId(id, userId)
+        .orElseThrow(
+            () -> new EntityNotFoundException(UserCommons.class, "commonsId", id, "userId", userId));
 
 
-  //       Commons commons = commonsRepository.findById(id).orElseThrow( 
-  //         ()->new EntityNotFoundException(Commons.class, id));
+        Commons commons = commonsRepository.findById(id).orElseThrow( 
+          ()->new EntityNotFoundException(Commons.class, id));
         
-  //       long previousId = userCommons.getId();
-  //       incomingUserCommons.setId(previousId);
-  //       //incomingUserCommons.setTotalWealth(incomingUserCommons.getTotalWealth() - commons.getCowPrice());
+        long previousId = userCommons.getId();
+        incomingUserCommons.setId(previousId);
+        incomingUserCommons.setTotalWealth(incomingUserCommons.getTotalWealth() - commons.getCowPrice());
 
-  //       userCommonsRepository.save(incomingUserCommons);
+        userCommonsRepository.save(incomingUserCommons);
         
-  //       String body = mapper.writeValueAsString(incomingUserCommons);
-  //       return ResponseEntity.ok().body(body);
-  //   }
+        String body = mapper.writeValueAsString(incomingUserCommons);
+        return ResponseEntity.ok().body(body);
+    }
 }
