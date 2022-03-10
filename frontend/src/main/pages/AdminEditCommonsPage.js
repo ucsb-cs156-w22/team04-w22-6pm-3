@@ -21,7 +21,7 @@ export default function AdminEditCommonsPage() {
     );
 
     const objectToAxiosPutParams = (common) => ({
-      url: "/api/commons",
+      url: "/api/commons/update",
       method: "PUT",
       params: {
         id: common.id,
@@ -52,7 +52,7 @@ export default function AdminEditCommonsPage() {
     }
 
     if (isSuccess) {
-      return <Navigate to="/commons/list" />
+      return <Navigate to="/admin/listcommons" />
     }
 
     return(
@@ -60,7 +60,7 @@ export default function AdminEditCommonsPage() {
         <div className = "pt-2">
           <h1>Edit Common</h1>
           {common &&
-            <CreateCommonsForm initialCommon={common} submitAction={onSubmit} buttonLabel="Update" />
+            <CreateCommonsForm initialCommon={common} submitAction={onSubmit} /*buttonLabel="Update"*/ />
           }  
         </div>
       </BasicLayout>

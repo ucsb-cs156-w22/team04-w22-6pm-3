@@ -11,7 +11,8 @@ export default function CommonsTable({ commons, currentUser }) {
     const navigate = useNavigate();
 
     const editCallback = (cell) => {
-        navigate(`/commons/edit/${cell.row.values.id}`)
+        navigate(`/admin/editcommons/${cell.row.values.id}`)
+        //navigate(`/commons/edit/${cell.row.values.id}`)
     }
 
     // Stryker disable all : hard to test for query caching
@@ -54,12 +55,11 @@ export default function CommonsTable({ commons, currentUser }) {
         },
         {
             Header:'Starting Date',
-            //accessor: row => row.startingDate.toString(),
             accessor: row => String(row.startingDate),
             id: 'startingDate'
         }
     ];
-
+    columns.push(ButtonColumn("Edit", "primary", editCallback, "CommonsTable"));
     if (hasRole(currentUser, "ROLE_ADMIN")) {
         columns.push(ButtonColumn("Edit", "primary", editCallback, "CommonsTable"));
         columns.push(ButtonColumn("Delete", "danger", deleteCallback, "CommonsTable"));
