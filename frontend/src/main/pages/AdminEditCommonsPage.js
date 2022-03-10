@@ -24,7 +24,7 @@ export default function AdminEditCommonsPage() {
       url: "/api/commons/update",
       method: "PUT",
       params: {
-        id: common.id,
+        id
       },
       data: {
        name: common.name,
@@ -36,7 +36,7 @@ export default function AdminEditCommonsPage() {
     });
 
     const onSuccess = (common) => {
-      toast(`Common Updated - id: ${common.id} name: ${common.name}`)
+      toast(`Common Updated - id: ${id}`)
     }
 
     const mutation = useBackendMutation(
@@ -52,7 +52,7 @@ export default function AdminEditCommonsPage() {
     }
 
     if (isSuccess) {
-      return <Navigate to="/admin/listcommons" />
+      return <Navigate to = "/admin/listcommons" />
     }
 
     return(
@@ -60,7 +60,7 @@ export default function AdminEditCommonsPage() {
         <div className = "pt-2">
           <h1>Edit Common</h1>
           {common &&
-            <CreateCommonsForm initialCommon={common} submitAction={onSubmit} /*buttonLabel="Update"*/ />
+            <CreateCommonsForm onSubmit={onSubmit} />
           }  
         </div>
       </BasicLayout>
