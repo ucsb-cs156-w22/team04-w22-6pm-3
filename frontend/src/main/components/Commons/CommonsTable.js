@@ -60,10 +60,7 @@ export default function CommonsTable({ commons, currentUser }) {
         }
     ];
     columns.push(ButtonColumn("Edit", "primary", editCallback, "CommonsTable"));
-    if (hasRole(currentUser, "ROLE_ADMIN")) {
-        columns.push(ButtonColumn("Edit", "primary", editCallback, "CommonsTable"));
-        columns.push(ButtonColumn("Delete", "danger", deleteCallback, "CommonsTable"));
-    }
+    columns.push(ButtonColumn("Delete", "danger", deleteCallback, "CommonsTable"));
 
     // Stryker disable next-line ArrayDeclaration : [columns] is a performance optimization
     

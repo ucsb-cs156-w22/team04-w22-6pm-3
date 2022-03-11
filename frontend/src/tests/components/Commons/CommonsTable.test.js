@@ -119,7 +119,7 @@ describe("UserTable tests", () => {
     fireEvent.click(editButton);
     fireEvent.click(deleteButton);
 
-    await waitFor(() => expect(mockedNavigate).toHaveBeenCalledWith('/commons/edit/5'));
+    await waitFor(() => expect(mockedNavigate).toHaveBeenCalledWith('/admin/editcommons/5'));
 
   });
 
