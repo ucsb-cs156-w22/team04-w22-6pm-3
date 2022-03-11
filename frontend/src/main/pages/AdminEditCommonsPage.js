@@ -21,7 +21,7 @@ export default function AdminEditCommonsPage() {
     );
 
     const objectToAxiosPutParams = (common) => ({
-      url: "/api/commons/update",
+      url: `/api/commons/update?id=${common.id}`,
       method: "PUT",
       params: {
         id: common.id,
@@ -35,19 +35,21 @@ export default function AdminEditCommonsPage() {
       }
     });
 
-    const onSuccess = (common) => {
-      toast(`Common Updated - id: ${common.id} name: ${common.name}`)
+    const onSuccess = () => {
+      toast(`Common with identifier ${id} updated.`)
     }
 
     const mutation = useBackendMutation(
       objectToAxiosPutParams,
       { onSuccess },
-      [`/api/commons?id=${id}`]
+      [`/api/commons/update?id=${id}`]
     );
 
-    const { isSuccess } = mutation
+    const { isSuccess } = mutation;
 
     const onSubmit = async (data) => {
+      // Tack on the identifier property for the PUT method.
+      data.id = id;
       mutation.mutate(data);
     }
 
@@ -55,13 +57,25 @@ export default function AdminEditCommonsPage() {
       return <Navigate to="/admin/listcommons" />
     }
 
+    // TODO: Apparently Date.toISOString converts the Date to UTC from local time. I'm struggling to
+    // understand how the form operates, but it appears to be making an ISO string from the date
+    // input. That could be a problem. In fact, we shouldn't be using the string constructor `new
+    // Date()` ever. The backend does not keep track of time zone information. Come back to this!
+
+    // https://stackoverflow.com/questions/14245339/pre-populating-date-input-field-with-javascript
+
+    if (common) {
+      console.log(common.startingDate);
+      common.startingDate = new Date(common.startingDate).toISOString().substring(0, 10); // BAD
+    }
+
     return(
       <BasicLayout>
         <div className = "pt-2">
           <h1>Edit Common</h1>
           {common &&
-            <CreateCommonsForm initialCommon={common} submitAction={onSubmit} /*buttonLabel="Update"*/ />
-          }  
+            <CreateCommonsForm defaultValues={common} onSubmit={onSubmit} /*buttonLabel="Update"*/ />
+          }
         </div>
       </BasicLayout>
     )
