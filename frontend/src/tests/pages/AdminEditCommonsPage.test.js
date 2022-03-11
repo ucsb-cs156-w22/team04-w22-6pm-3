@@ -62,7 +62,7 @@ describe("CommonsEditPage tests", () => {
 
     describe("tests where backend is working normally", () => {
 
-        const axiosMock = new AxiosMockAdapter(axios);
+        let axiosMock = new AxiosMockAdapter(axios);
 
         beforeEach(() => {
             axiosMock.reset();
@@ -77,7 +77,7 @@ describe("CommonsEditPage tests", () => {
                 startingBalance: 123,
                 startingDate: "2022-03-05T12:00:00"
             });
-            axiosMock.onPut('/api/commons/update').reply(200);
+            axiosMock.onPut('/api/commons/update', { params: {id: 17 } }).reply(204);
         });
 
         const queryClient = new QueryClient();
@@ -120,9 +120,6 @@ describe("CommonsEditPage tests", () => {
         });
 
         test("Changes when you click Update", async () => {
-
-
-
             const { getByTestId } = render(
                 <QueryClientProvider client={queryClient}>
                     <MemoryRouter>
@@ -158,12 +155,11 @@ describe("CommonsEditPage tests", () => {
 
             fireEvent.click(submitButton);
 
-            waitFor(() => expect(mockNavigate).toBeCalledWith({ "to": "/admin/listcommons" }));
-            waitFor(() => expect(mockToast).toBeCalled);
-            waitFor(() => expect(mockToast).toBeCalledWith("Commons with identifier 17 updated."));
+            await waitFor(() => expect(mockToast).toBeCalledWith("Common with identifier 17 updated."));
+            await waitFor(() => expect(mockNavigate).toBeCalledWith({ "to": "/admin/listcommons" }));
 
             // HTTP PUT does not reply with a response body.
-            waitFor(() => expect(axiosMock.history.put.length).toBe(1)); // times called
+            expect(axiosMock.history.put.length).toBe(1); // times called
         });
 
 
