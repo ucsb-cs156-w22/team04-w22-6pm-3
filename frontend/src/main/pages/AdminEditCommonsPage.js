@@ -57,16 +57,11 @@ export default function AdminEditCommonsPage() {
       return <Navigate to="/admin/listcommons" />
     }
 
-    // TODO: Apparently Date.toISOString converts the Date to UTC from local time. I'm struggling to
-    // understand how the form operates, but it appears to be making an ISO string from the date
-    // input. That could be a problem. In fact, we shouldn't be using the string constructor `new
-    // Date()` ever. The backend does not keep track of time zone information. Come back to this!
-
-    // https://stackoverflow.com/questions/14245339/pre-populating-date-input-field-with-javascript
+    // TODO: Not quite sure what to do if the backend fails to fetch before we get here. We get the
+    // date to feed to the HTML date input.
 
     if (common) {
-      console.log(common.startingDate);
-      common.startingDate = new Date(common.startingDate).toISOString().substring(0, 10); // BAD
+      common.startingDate = common.startingDate.substring(0, 10);
     }
 
     return(
