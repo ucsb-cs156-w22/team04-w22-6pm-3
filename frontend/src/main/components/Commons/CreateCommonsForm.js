@@ -11,9 +11,13 @@ export default function CreateCommonsForm(props) {
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
+
+      
+
       <Form.Group className="mb-3">
         <Form.Label htmlFor="name">Commons Name</Form.Label>
         <Form.Control
+          data-testid="CreateCommonsForm-name"
           id="name"
           type="text"
           isInvalid={!!errors.name}
@@ -28,6 +32,7 @@ export default function CreateCommonsForm(props) {
       <Form.Group className="mb-3">
         <Form.Label htmlFor="startingBalance">Starting Balance</Form.Label>
         <Form.Control
+          data-testid="CreateCommonsForm-startingBalance"
           id="startingBalance"
           type="number"
           step="0.01"
@@ -46,6 +51,7 @@ export default function CreateCommonsForm(props) {
       <Form.Group className="mb-3">
         <Form.Label htmlFor="cowPrice">Cow Price</Form.Label>
         <Form.Control
+          data-testid="CreateCommonsForm-cowPrice"
           id="cowPrice"
           type="number"
           step="0.01"
@@ -64,6 +70,7 @@ export default function CreateCommonsForm(props) {
       <Form.Group className="mb-3">
         <Form.Label htmlFor="milkPrice">Milk Price</Form.Label>
         <Form.Control
+        data-testid="CreateCommonsForm-milkPrice"
           id="milkPrice"
           type="number"
           step="0.01"
@@ -82,6 +89,7 @@ export default function CreateCommonsForm(props) {
       <Form.Group className="mb-3">
         <Form.Label htmlFor="startingDate">Starting Date</Form.Label>
         <Form.Control
+          data-testid="CreateCommonsForm-startingDate"
           id="startingDate"
           type="date"
           isInvalid={!!errors.startingDate}

@@ -108,22 +108,22 @@ describe("CommonsEditPage tests", () => {
                 </QueryClientProvider>
             );
 
-            await waitFor(() => expect(getByTestId("CreateCommonsForm-id")).toBeInTheDocument());
+            await waitFor(() => expect(getByTestId("CreateCommonsForm-name")).toBeInTheDocument());
 
-            const idField = getByTestId("CreateCommonsForm-id");
+            //const idField = getByTestId("CreateCommonsForm-id");
             const nameField = getByTestId("CreateCommonsForm-name");
             const cowPriceField = getByTestId("CreateCommonsForm-cowPrice");
             const milkPriceField = getByTestId("CreateCommonsForm-milkPrice");
             const startingBalanceField = getByTestId("CreateCommonsForm-startingBalance");
             const startingDateField = getByTestId("CreateCommonsForm-startingDate");
-            const submitButton = getByTestId("CreateCommonsForm-submit");
+            const submitButton = getByTestId("CreateCommonsForm-Create-Button");
 
-            expect(idField).toHaveValue("17");
+            //expect(idField).toHaveValue("17");
             expect(nameField).toHaveValue("abc");
-            expect(cowPriceField).toHaveValue("123");
-            expect(milkPriceField).toHaveValue("123");
-            expect(startingBalanceField).toHaveValue("123");
-            expect(startingDateField).toHaveValue("2022-03-07T12:00:00");
+            expect(cowPriceField).toHaveValue(123);
+            expect(milkPriceField).toHaveValue(123);
+            expect(startingBalanceField).toHaveValue(123);
+            expect(startingDateField).toHaveValue("2022-03-05");
         });
 
         test("Changes when you click Update", async () => {
@@ -138,22 +138,22 @@ describe("CommonsEditPage tests", () => {
                 </QueryClientProvider>
             );
 
-            await waitFor(() => expect(getByTestId("CreateCommonsForm-id")).toBeInTheDocument());
+            await waitFor(() => expect(getByTestId("CreateCommonsForm-name")).toBeInTheDocument());
 
-            const idField = getByTestId("CreateCommonsForm-id");
+            //const idField = getByTestId("CreateCommonsForm-id");
             const nameField = getByTestId("CreateCommonsForm-name");
             const cowPriceField = getByTestId("CreateCommonsForm-cowPrice");
             const milkPriceField = getByTestId("CreateCommonsForm-milkPrice");
             const startingBalanceField = getByTestId("CreateCommonsForm-startingBalance");
             const startingDateField = getByTestId("CreateCommonsForm-startingDate");
-            const submitButton = getByTestId("CreateCommonsForm-submit");
+            const submitButton = getByTestId("CreateCommonsForm-Create-Button");
 
-            expect(idField).toHaveValue("17");
+            //expect(idField).toHaveValue("17");
             expect(nameField).toHaveValue("abc");
-            expect(cowPriceField).toHaveValue("123");
-            expect(milkPriceField).toHaveValue("123");
-            expect(startingBalanceField).toHaveValue("123");
-            expect(startingDateField).toHaveValue("2022-03-07T12:00:00");
+            expect(cowPriceField).toHaveValue(123);
+            expect(milkPriceField).toHaveValue(123);
+            expect(startingBalanceField).toHaveValue(123);
+            expect(startingDateField).toHaveValue("2022-03-05");
 
             expect(submitButton).toBeInTheDocument();
 
