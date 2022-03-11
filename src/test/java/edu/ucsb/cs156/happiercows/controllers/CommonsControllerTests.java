@@ -293,7 +293,6 @@ public class CommonsControllerTests extends ControllerTestCase {
         .andExpect(status().is(404)).andReturn();
 
     verify(userCommonsRepository, times(1)).findByCommonsIdAndUserId(2L, 1L);
-    verify(userCommonsRepository, times(1)).save(uc);
 
     Map<String, Object> responseMap = responseToJson(response);
 
