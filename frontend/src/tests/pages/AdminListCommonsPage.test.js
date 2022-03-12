@@ -6,7 +6,7 @@ import AdminListCommonPage from "main/pages/AdminListCommonPage";
 
 import { apiCurrentUserFixtures } from "fixtures/currentUserFixtures";
 import { systemInfoFixtures } from "fixtures/systemInfoFixtures";
-import commonsFixtures from "fixtures/commonsFixtures"; 
+import commonsFixtures from "fixtures/commonsFixtures";
 import axios from "axios";
 import AxiosMockAdapter from "axios-mock-adapter";
 import mockConsole from "jest-mock-console";
@@ -92,7 +92,7 @@ describe("AdminListCommonPage tests", () => {
         await waitFor(() => { expect(getByTestId(`${testId}-cell-row-0-col-id`)).toHaveTextContent("5"); });
         expect(getByTestId(`${testId}-cell-row-1-col-id`)).toHaveTextContent("4");
         expect(getByTestId(`${testId}-cell-row-2-col-id`)).toHaveTextContent("1");
-        
+
 
     });
 
@@ -121,6 +121,44 @@ describe("AdminListCommonPage tests", () => {
         expect(queryByTestId(`${testId}-cell-row-0-col-id`)).not.toBeInTheDocument();
     });
 
- 
+    test("delete removes a row", async () => {
+    const queryClient = new QueryClient();
 
+        const { getByTestId, queryByTestId } = render(
+            <QueryClientProvider client={queryClient}>
+                <MemoryRouter>
+                    <AdminListCommonPage />
+                </MemoryRouter>
+            </QueryClientProvider>
+        );
+
+        // Component not rerendering on GET?
+
+        axiosMock
+            .onGet("/api/commons/all").replyOnce(200, [{
+                id: 17,
+                name: "abc",
+                cowPrice: 123,
+                milkPrice: 123,
+                startingBalance: 123,
+                startingDate: "2022-03-05T12:00:00"
+            }])
+            .onDelete("/api/commons", { params: { id: 17 }})
+            .replyOnce(200)
+            .onGet("/api/commons/all")
+            .replyOnce(200, []);
+
+        await waitFor(() => { expect(getByTestId('CommonsTable-cell-row-0-col-id')).toBeInTheDocument(); });
+
+        expect(getByTestId('CommonsTable-cell-row-0-col-id')).toHaveTextContent("17");
+
+        const buttonLabel = "CommonsTable-cell-row-0-col-Delete-button";
+        const deleteButton = getByTestId(buttonLabel);
+
+        fireEvent.click(deleteButton);
+
+        await waitFor(() => { expect(mockToast).toBeCalledWith("commons with id 17 deleted"); });
+
+        await waitFor(() => { expect(queryByTestId(buttonLabel)).not.toBeInTheDocument(); });;
+    });
 });

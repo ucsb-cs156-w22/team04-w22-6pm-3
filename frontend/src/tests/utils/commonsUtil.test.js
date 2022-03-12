@@ -15,20 +15,12 @@ describe("CommonsUtils", () => {
 
     describe("onDeleteSuccess", () => {
 
-        test("It puts the message on console.log and in a toast", () => {
-            // arrange
-            const restoreConsole = mockConsole();
-
+        test("It puts the message in a toast", () => {
             // act
             onDeleteSuccess("abc");
-            
+
             // assert
             expect(mockToast).toHaveBeenCalledWith("abc");
-            expect(console.log).toHaveBeenCalled();
-            const message = console.log.mock.calls[0][0];
-            expect(message).toMatch("abc");
-
-            restoreConsole();
         });
 
     });

@@ -1,4 +1,4 @@
-import { fireEvent, queryByTestId, render, waitFor } from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { MemoryRouter } from "react-router-dom";
 import AdminEditCommonsPage from "main/pages/AdminEditCommonsPage";
@@ -60,8 +60,8 @@ describe("CommonsEditPage tests", () => {
         });
     });
 
-    describe("tests where backend is working normally", () => {
-
+    describe("when the form displays", () => {
+        const queryClient = new QueryClient();
         let axiosMock = new AxiosMockAdapter(axios);
 
         beforeEach(() => {
@@ -69,7 +69,7 @@ describe("CommonsEditPage tests", () => {
             axiosMock.resetHistory();
             axiosMock.onGet("/api/currentUser").reply(200, apiCurrentUserFixtures.userOnly);
             axiosMock.onGet("/api/systemInfo").reply(200, systemInfoFixtures.showingNeither);
-            axiosMock.onGet("/api/commons", { params: { id: 17 } }).reply(200, {
+            axiosMock.onGet("/api/commons", { params: { id: 17 } }).replyOnce(200, {
                 id: 17,
                 name: "abc",
                 cowPrice: 123,
@@ -77,10 +77,8 @@ describe("CommonsEditPage tests", () => {
                 startingBalance: 123,
                 startingDate: "2022-03-05T12:00:00"
             });
-            axiosMock.onPut('/api/commons/update', { params: {id: 17 } }).reply(204);
         });
 
-        const queryClient = new QueryClient();
         test("renders without crashing", () => {
             render(
                 <QueryClientProvider client={queryClient}>
@@ -91,8 +89,7 @@ describe("CommonsEditPage tests", () => {
             );
         });
 
-        test("Is populated with the data provided", async () => {
-
+        test("is populated with the data provided", async () => {
             const { getByTestId } = render(
                 <QueryClientProvider client={queryClient}>
                     <MemoryRouter>
@@ -119,7 +116,7 @@ describe("CommonsEditPage tests", () => {
             expect(startingDateField).toHaveValue("2022-03-05");
         });
 
-        test("Changes when you click Update", async () => {
+        test("changes when you click update", async () => {
             const { getByTestId } = render(
                 <QueryClientProvider client={queryClient}>
                     <MemoryRouter>
@@ -127,6 +124,8 @@ describe("CommonsEditPage tests", () => {
                     </MemoryRouter>
                 </QueryClientProvider>
             );
+
+            axiosMock.onPut('/api/commons/update', { params: {id: 17 } }).reply(204);
 
             await waitFor(() => expect(getByTestId("CreateCommonsForm-name")).toBeInTheDocument());
 
@@ -161,7 +160,5 @@ describe("CommonsEditPage tests", () => {
             // HTTP PUT does not reply with a response body.
             expect(axiosMock.history.put.length).toBe(1); // times called
         });
-
-
     });
 });

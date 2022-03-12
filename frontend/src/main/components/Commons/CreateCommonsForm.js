@@ -28,7 +28,6 @@ export default function CreateCommonsForm(props) {
         </Form.Control.Feedback>
       </Form.Group>
 
-
       <Form.Group className="mb-3">
         <Form.Label htmlFor="startingBalance">Starting Balance</Form.Label>
         <Form.Control
