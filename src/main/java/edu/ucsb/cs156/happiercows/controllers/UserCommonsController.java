@@ -77,17 +77,17 @@ public class UserCommonsController extends ApiController {
   @PreAuthorize("hasRole('ROLE_USER')")
   @PutMapping("/buy")
   public ResponseEntity<String> putUserCommonsByIdBuy(
-          @ApiParam("commonsId") @RequestParam Long id, 
+          @ApiParam("commonsId") @RequestParam Long commonsId, 
             @RequestBody @Valid UserCommons incomingUserCommons) throws JsonProcessingException {
         User u = getCurrentUser().getUser();
         Long userId = u.getId();
-        UserCommons userCommons = userCommonsRepository.findByCommonsIdAndUserId(id, userId)
+        UserCommons userCommons = userCommonsRepository.findByCommonsIdAndUserId(commonsId, userId)
         .orElseThrow(
-            () -> new EntityNotFoundException(UserCommons.class, "commonsId", id, "userId", userId));
+            () -> new EntityNotFoundException(UserCommons.class, "commonsId", commonsId, "userId", userId));
 
 
-        Commons commons = commonsRepository.findById(id).orElseThrow( 
-          ()->new EntityNotFoundException(Commons.class, id));
+        Commons commons = commonsRepository.findById(commonsId).orElseThrow( 
+          ()->new EntityNotFoundException(Commons.class, commonsId));
         
         long previousId = userCommons.getId();
         incomingUserCommons.setId(previousId);
@@ -105,17 +105,17 @@ public class UserCommonsController extends ApiController {
   @PreAuthorize("hasRole('ROLE_USER')")
   @PutMapping("/sell")
   public ResponseEntity<String> putUserCommonsByIdSell(
-          @ApiParam("commonsId") @RequestParam Long id, 
+          @ApiParam("commonsId") @RequestParam Long commonsId, 
             @RequestBody @Valid UserCommons incomingUserCommons) throws JsonProcessingException {
         User u = getCurrentUser().getUser();
         Long userId = u.getId();
-        UserCommons userCommons = userCommonsRepository.findByCommonsIdAndUserId(id, userId)
+        UserCommons userCommons = userCommonsRepository.findByCommonsIdAndUserId(commonsId, userId)
         .orElseThrow(
-            () -> new EntityNotFoundException(UserCommons.class, "commonsId", id, "userId", userId));
+            () -> new EntityNotFoundException(UserCommons.class, "commonsId", commonsId, "userId", userId));
 
 
-        Commons commons = commonsRepository.findById(id).orElseThrow( 
-          ()->new EntityNotFoundException(Commons.class, id));
+        Commons commons = commonsRepository.findById(commonsId).orElseThrow( 
+          ()->new EntityNotFoundException(Commons.class, commonsId));
         
         long previousId = userCommons.getId();
         incomingUserCommons.setId(previousId);

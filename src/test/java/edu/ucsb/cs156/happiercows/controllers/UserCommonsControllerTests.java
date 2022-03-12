@@ -183,7 +183,7 @@ public void test_BuyCow_commons_exists() throws Exception {
     when(commonsRepository.findById(eq(1L))).thenReturn(Optional.of(randomCommons));
 
     // act
-    MvcResult response = mockMvc.perform(put("/api/usercommons/buy?id=1") //oof, accidentally made PUT endpoints id variable instead of commonsId. TODO: Fix later.
+    MvcResult response = mockMvc.perform(put("/api/usercommons/buy?commonsId=1")
         .contentType(MediaType.APPLICATION_JSON)
                     .characterEncoding("utf-8")
                     .content(requestBody)
@@ -247,7 +247,7 @@ public void test_SellCow_commons_exists() throws Exception {
     when(commonsRepository.findById(eq(1L))).thenReturn(Optional.of(randomCommons));
 
     // act
-    MvcResult response = mockMvc.perform(put("/api/usercommons/sell?id=1")
+    MvcResult response = mockMvc.perform(put("/api/usercommons/sell?commonsId=1")
         .contentType(MediaType.APPLICATION_JSON)
                     .characterEncoding("utf-8")
                     .content(requestBody)
@@ -260,33 +260,6 @@ public void test_SellCow_commons_exists() throws Exception {
     String responseString = response.getResponse().getContentAsString();
     assertEquals(expectedReturn, responseString);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 @WithMockUser(roles = { "USER" })
 @Test
@@ -337,7 +310,7 @@ public void test_BuyCow_commons_DOES_NOT_exist() throws Exception {
     when(commonsRepository.findById(eq(1L))).thenReturn(Optional.of(randomCommons));
 
     // act
-    MvcResult response = mockMvc.perform(put("/api/usercommons/buy?id=234") //oof, accidentally made PUT endpoints id variable instead of commonsId. TODO: Fix later.
+    MvcResult response = mockMvc.perform(put("/api/usercommons/buy?commonsId=234") 
         .contentType(MediaType.APPLICATION_JSON)
                     .characterEncoding("utf-8")
                     .content(requestBody)
@@ -403,7 +376,7 @@ public void test_SellCow_commons_DOES_NOTexist() throws Exception {
     when(commonsRepository.findById(eq(1L))).thenReturn(Optional.of(randomCommons));
 
     // act
-    MvcResult response = mockMvc.perform(put("/api/usercommons/sell?id=234")
+    MvcResult response = mockMvc.perform(put("/api/usercommons/sell?commonsId=234")
         .contentType(MediaType.APPLICATION_JSON)
                     .characterEncoding("utf-8")
                     .content(requestBody)

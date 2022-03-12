@@ -37,7 +37,7 @@ export default function PlayPage() {
         method: "GET",
         url: "/api/commons",
         params: {
-          id: commonsId
+          commonsId: commonsId
         }
       }
     );
@@ -51,7 +51,7 @@ export default function PlayPage() {
       method: "PUT",
       data: newUserCommons,
       params: {
-        id: commonsId
+        commonsId: commonsId
       }
     });
   
@@ -79,7 +79,7 @@ export default function PlayPage() {
     method: "PUT",
     data: newUserCommons,
     params: {
-      id: commonsId
+      commonsId: commonsId
     }
   });
 
