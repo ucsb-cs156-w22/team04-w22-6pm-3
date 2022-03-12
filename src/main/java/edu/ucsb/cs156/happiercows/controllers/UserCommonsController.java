@@ -91,8 +91,11 @@ public class UserCommonsController extends ApiController {
         
         long previousId = userCommons.getId();
         incomingUserCommons.setId(previousId);
-        incomingUserCommons.setTotalWealth(incomingUserCommons.getTotalWealth() - commons.getCowPrice());
-
+        if(incomingUserCommons.getTotalWealth() >= commons.getCowPrice() ){
+          incomingUserCommons.setTotalWealth(incomingUserCommons.getTotalWealth() - commons.getCowPrice());
+        } else{
+          incomingUserCommons.setTotalWealth(incomingUserCommons.getTotalWealth());
+        }
         userCommonsRepository.save(incomingUserCommons);
         
         String body = mapper.writeValueAsString(incomingUserCommons);
