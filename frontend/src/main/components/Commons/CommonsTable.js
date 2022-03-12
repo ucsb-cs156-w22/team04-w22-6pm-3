@@ -20,7 +20,7 @@ export default function CommonsTable({ commons, currentUser }) {
     const deleteMutation = useBackendMutation(
         cellToAxiosParamsDelete,
         { onSuccess: onDeleteSuccess },
-        ["/api/commons/all"]
+        ["/api/commons/delete"]
     );
     // Stryker enable all
 
@@ -59,11 +59,12 @@ export default function CommonsTable({ commons, currentUser }) {
             id: 'startingDate'
         }
     ];
+
     columns.push(ButtonColumn("Edit", "primary", editCallback, "CommonsTable"));
     columns.push(ButtonColumn("Delete", "danger", deleteCallback, "CommonsTable"));
 
     // Stryker disable next-line ArrayDeclaration : [columns] is a performance optimization
-    
+
 
     for (let readable of commons) {
         readable.startingDate = new Date(readable.startingDate).toLocaleString();
