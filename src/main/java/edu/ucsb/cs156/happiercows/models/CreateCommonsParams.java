@@ -23,8 +23,8 @@ import edu.ucsb.cs156.happiercows.entities.User;
 public class CreateCommonsParams
 {
   private String name;
-  @NumberFormat private double cowPrice;
-  @NumberFormat private double milkPrice;
-  @NumberFormat private double startingBalance;
+  @NumberFormat private Double cowPrice;
+  @NumberFormat private Double milkPrice;
+  @NumberFormat private Double startingBalance;
   @DateTimeFormat private LocalDateTime startingDate;
 }

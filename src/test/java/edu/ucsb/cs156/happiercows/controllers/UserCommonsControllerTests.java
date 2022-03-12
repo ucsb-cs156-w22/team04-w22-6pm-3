@@ -261,7 +261,32 @@ public void test_SellCow_commons_exists() throws Exception {
     assertEquals(expectedReturn, responseString);
 }
 
-//tests for non-existing, 404
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 @WithMockUser(roles = { "USER" })
 @Test
@@ -392,10 +417,5 @@ public void test_SellCow_commons_DOES_NOTexist() throws Exception {
     Map<String, Object> jsonResponse = responseToJson(response);
     assertEquals(expectedJson, jsonResponse);
 }
-
-
-// new 404 ones for when the Commons is missing (instead of usercommons)
-
-
 
 }
