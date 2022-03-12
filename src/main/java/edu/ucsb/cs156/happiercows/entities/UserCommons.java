@@ -28,6 +28,5 @@ public class UserCommons {
 
   private double totalWealth;
 
-  private int numOfCows;
 }
 

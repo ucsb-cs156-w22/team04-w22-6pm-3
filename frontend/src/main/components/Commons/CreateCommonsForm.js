@@ -79,20 +79,20 @@ export default function CreateCommonsForm(props) {
       </Form.Group>
 
       <Form.Group className="mb-3">
-        <Form.Label htmlFor="startingDate">Starting Date</Form.Label>
+        <Form.Label htmlFor="startDate">Start Date</Form.Label>
         <Form.Control
-          id="startingDate"
+          id="startDate"
           type="date"
-          isInvalid={!!errors.startingDate}
-          {...register("startingDate", {
+          isInvalid={!!errors.startDate}
+          {...register("startDate", {
             valueAsDate: true,
             validate: {
-              isPresent: (v) => !isNaN(v) || "Starting date is required",
+              isPresent: (v) => !isNaN(v) || "Start date is required",
             },
           })}
         />
         <Form.Control.Feedback type="invalid">
-          {errors.startingDate?.message}
+          {errors.startDate?.message}
         </Form.Control.Feedback>
       </Form.Group>
       <Button type="submit" data-testid="CreateCommonsForm-Create-Button">Create</Button>
