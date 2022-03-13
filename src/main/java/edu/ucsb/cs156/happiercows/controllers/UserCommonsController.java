@@ -91,8 +91,10 @@ public class UserCommonsController extends ApiController {
         
         long previousId = userCommons.getId();
         incomingUserCommons.setId(previousId);
-        incomingUserCommons.setTotalWealth(incomingUserCommons.getTotalWealth() - commons.getCowPrice());
-        incomingUserCommons.setNumOfCows(incomingUserCommons.getNumOfCows() + 1);
+        if(incomingUserCommons.getTotalWealth() >= commons.getCowPrice() ){
+          incomingUserCommons.setTotalWealth(incomingUserCommons.getTotalWealth() - commons.getCowPrice());
+          incomingUserCommons.setNumOfCows(incomingUserCommons.getNumOfCows() + 1);
+        }
         userCommonsRepository.save(incomingUserCommons);
         
         String body = mapper.writeValueAsString(incomingUserCommons);
@@ -120,8 +122,10 @@ public class UserCommonsController extends ApiController {
         long previousId = userCommons.getId();
         incomingUserCommons.setId(previousId);
         //TODO: Change this equation to be based on cowhealth
-        incomingUserCommons.setTotalWealth(incomingUserCommons.getTotalWealth() + commons.getCowPrice());
-        incomingUserCommons.setNumOfCows(incomingUserCommons.getNumOfCows() - 1);
+        if(incomingUserCommons.getNumOfCows() >= 1 ){
+          incomingUserCommons.setTotalWealth(incomingUserCommons.getTotalWealth() + commons.getCowPrice());
+          incomingUserCommons.setNumOfCows(incomingUserCommons.getNumOfCows() - 1);
+        }
         userCommonsRepository.save(incomingUserCommons);
         
         String body = mapper.writeValueAsString(incomingUserCommons);
