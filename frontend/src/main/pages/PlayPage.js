@@ -10,6 +10,7 @@ import FarmStats from "main/components/Commons/FarmStats";
 import Profits from "main/components/Commons/Profits";
 import { useBackend } from "main/utils/useBackend";
 import { useBackendMutation } from "main/utils/useBackend";
+import { toast } from "react-toastify"
 
 export default function PlayPage() {
 
@@ -57,7 +58,7 @@ export default function PlayPage() {
   
     const mutationbuy = useBackendMutation(
       objectToAxiosParamsBuy,
-      { onSuccessBuy },
+      { onSuccess: onSuccessBuy },
       // Stryker disable next-line all : hard to set up test for caching
       [`/api/usercommons/forcurrentuser?commonsId=${commonsId}`]
     );
@@ -85,7 +86,7 @@ export default function PlayPage() {
 
   const mutationsell = useBackendMutation(
     objectToAxiosParamsSell,
-    { onSuccessSell },
+    { onSuccess: onSuccessSell },
     // Stryker disable next-line all : hard to set up test for caching
     [`/api/usercommons/forcurrentuser?commonsId=${commonsId}`]
   );
