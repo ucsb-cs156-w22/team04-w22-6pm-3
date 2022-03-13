@@ -55,7 +55,7 @@ public class UserCommonsControllerTests extends ControllerTestCase {
   private ObjectMapper objectMapper;
 
   public static UserCommons dummyUserCommons(long id) {
-    UserCommons userCommons = new UserCommons(id, 1, 1, 1);
+    UserCommons userCommons = new UserCommons(id, 1, 1, 1, 1);
     return userCommons;
   }
 
@@ -146,6 +146,7 @@ public void test_BuyCow_commons_exists() throws Exception {
     .userId(1L)
     .commonsId(1L)
     .totalWealth(300)
+    .numOfCows(1)
     .build();
 
     Commons randomCommons = Commons
@@ -163,6 +164,7 @@ public void test_BuyCow_commons_exists() throws Exception {
     .userId(1L)
     .commonsId(1L)
     .totalWealth(300)
+    .numOfCows(1)
     .build();
 
     UserCommons correctuserCommons = UserCommons
@@ -171,6 +173,7 @@ public void test_BuyCow_commons_exists() throws Exception {
     .userId(1L)
     .commonsId(1L)
     .totalWealth(300-randomCommons.getCowPrice())
+    .numOfCows(2)
     .build();
 
     String requestBody = mapper.writeValueAsString(userCommonsToSend);
@@ -206,6 +209,7 @@ public void test_SellCow_commons_exists() throws Exception {
     .userId(1L)
     .commonsId(1L)
     .totalWealth(300)
+    .numOfCows(1)
     .build();
 
     Commons randomCommons = Commons
@@ -223,6 +227,7 @@ public void test_SellCow_commons_exists() throws Exception {
     .userId(1L)
     .commonsId(1L)
     .totalWealth(300)
+    .numOfCows(1)
     .build();
 
     UserCommons correctuserCommons = UserCommons
@@ -231,6 +236,7 @@ public void test_SellCow_commons_exists() throws Exception {
     .userId(1L)
     .commonsId(1L)
     .totalWealth(300+randomCommons.getCowPrice())
+    .numOfCows(0)
     .build();
 
     String requestBody = mapper.writeValueAsString(userCommonsToSend);
@@ -266,6 +272,7 @@ public void test_BuyCow_commons_for_user_DOES_NOT_exist() throws Exception {
     .userId(1L)
     .commonsId(1L)
     .totalWealth(300)
+    .numOfCows(1)
     .build();
 
     Commons randomCommons = Commons
@@ -283,6 +290,7 @@ public void test_BuyCow_commons_for_user_DOES_NOT_exist() throws Exception {
     .userId(1L)
     .commonsId(1L)
     .totalWealth(300)
+    .numOfCows(1)
     .build();
 
     UserCommons correctuserCommons = UserCommons
@@ -291,6 +299,7 @@ public void test_BuyCow_commons_for_user_DOES_NOT_exist() throws Exception {
     .userId(1L)
     .commonsId(1L)
     .totalWealth(300-randomCommons.getCowPrice())
+    .numOfCows(2)
     .build();
 
     String requestBody = mapper.writeValueAsString(userCommonsToSend);
@@ -328,6 +337,7 @@ public void test_SellCow_commons_for_usercommons_DOES_NOT_exist() throws Excepti
     .userId(1L)
     .commonsId(1L)
     .totalWealth(300)
+    .numOfCows(1)
     .build();
 
     Commons randomCommons = Commons
@@ -346,6 +356,7 @@ public void test_SellCow_commons_for_usercommons_DOES_NOT_exist() throws Excepti
     .userId(1L)
     .commonsId(1L)
     .totalWealth(300)
+    .numOfCows(1)
     .build();
 
     UserCommons correctuserCommons = UserCommons
@@ -354,6 +365,7 @@ public void test_SellCow_commons_for_usercommons_DOES_NOT_exist() throws Excepti
     .userId(1L)
     .commonsId(1L)
     .totalWealth(300+randomCommons.getCowPrice())
+    .numOfCows(2)
     .build();
 
     String requestBody = mapper.writeValueAsString(userCommonsToSend);
@@ -392,6 +404,7 @@ public void test_SellCow_commons_DOES_NOT_exist() throws Exception {
     .userId(1L)
     .commonsId(1L)
     .totalWealth(300)
+    .numOfCows(1)
     .build();
 
     Commons randomCommons = Commons
@@ -409,6 +422,7 @@ public void test_SellCow_commons_DOES_NOT_exist() throws Exception {
     .userId(1L)
     .commonsId(1L)
     .totalWealth(300)
+    .numOfCows(1)
     .build();
 
     UserCommons correctuserCommons = UserCommons
@@ -417,6 +431,7 @@ public void test_SellCow_commons_DOES_NOT_exist() throws Exception {
     .userId(1L)
     .commonsId(1L)
     .totalWealth(300+randomCommons.getCowPrice())
+    .numOfCows(2)
     .build();
 
     String requestBody = mapper.writeValueAsString(userCommonsToSend);
@@ -453,6 +468,7 @@ public void test_BuyCow_commons_DOES_NOT_exist() throws Exception {
     .userId(1L)
     .commonsId(1L)
     .totalWealth(300)
+    .numOfCows(1)
     .build();
 
     Commons randomCommons = Commons
@@ -470,6 +486,7 @@ public void test_BuyCow_commons_DOES_NOT_exist() throws Exception {
     .userId(1L)
     .commonsId(1L)
     .totalWealth(300)
+    .numOfCows(1)
     .build();
 
     UserCommons correctuserCommons = UserCommons
@@ -478,6 +495,7 @@ public void test_BuyCow_commons_DOES_NOT_exist() throws Exception {
     .userId(1L)
     .commonsId(1L)
     .totalWealth(300+randomCommons.getCowPrice())
+    .numOfCows(2)
     .build();
 
     String requestBody = mapper.writeValueAsString(userCommonsToSend);

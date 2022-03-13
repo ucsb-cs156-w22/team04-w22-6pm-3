@@ -31,7 +31,7 @@ export default function PlayPage() {
       }
     );
 
-  const { data: commons, error: commonsError, status: commonsStatus } =
+    const { data: commons, error: commonsError, status: commonsStatus } =
     useBackend(
       // Stryker disable next-line all : don't test internal caching of React Query
       [`/api/commons?commons_id=${commonsId}`],
@@ -46,16 +46,15 @@ export default function PlayPage() {
     const { data: userCommonsProfits, error: userCommonsProfitsError, status: userCommonsProfitsStatus } =
     useBackend(
       // Stryker disable next-line all : don't test internal caching of React Query
-      [`/api/profits/all/commons?userCommonsId=${commonsId}`],
+      [`/api/profits/all/commons?commonsId=${commonsId}`],
       {  // Stryker disable next-line all : GET is the default, so changing this to "" doesn't introduce a bug
         method: "GET",
         url: "/api/profits/all/commons",
         params: {
-          userCommonsId: commonsId
+          commonsId: commonsId
         }
       }
     );
-
     const onSuccessBuy = (commons) => {
       toast(`Cow bought! - id: ${commons.id} name: ${commons.name}`);
   }
