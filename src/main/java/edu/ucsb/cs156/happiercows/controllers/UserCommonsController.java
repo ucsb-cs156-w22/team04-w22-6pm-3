@@ -81,13 +81,13 @@ public class UserCommonsController extends ApiController {
             @RequestBody @Valid UserCommons incomingUserCommons) throws JsonProcessingException {
         User u = getCurrentUser().getUser();
         Long userId = u.getId();
+
+        Commons commons = commonsRepository.findById(commonsId).orElseThrow( 
+          ()->new EntityNotFoundException(Commons.class, commonsId));
         UserCommons userCommons = userCommonsRepository.findByCommonsIdAndUserId(commonsId, userId)
         .orElseThrow(
             () -> new EntityNotFoundException(UserCommons.class, "commonsId", commonsId, "userId", userId));
 
-
-        Commons commons = commonsRepository.findById(commonsId).orElseThrow( 
-          ()->new EntityNotFoundException(Commons.class, commonsId));
         
         long previousId = userCommons.getId();
         incomingUserCommons.setId(previousId);
@@ -109,14 +109,14 @@ public class UserCommonsController extends ApiController {
             @RequestBody @Valid UserCommons incomingUserCommons) throws JsonProcessingException {
         User u = getCurrentUser().getUser();
         Long userId = u.getId();
+
+        Commons commons = commonsRepository.findById(commonsId).orElseThrow( 
+          ()->new EntityNotFoundException(Commons.class, commonsId));
         UserCommons userCommons = userCommonsRepository.findByCommonsIdAndUserId(commonsId, userId)
         .orElseThrow(
             () -> new EntityNotFoundException(UserCommons.class, "commonsId", commonsId, "userId", userId));
 
 
-        Commons commons = commonsRepository.findById(commonsId).orElseThrow( 
-          ()->new EntityNotFoundException(Commons.class, commonsId));
-        
         long previousId = userCommons.getId();
         incomingUserCommons.setId(previousId);
         //TODO: Change this equation to be based on cowhealth

@@ -173,9 +173,6 @@ public void test_BuyCow_commons_exists() throws Exception {
     .totalWealth(300-randomCommons.getCowPrice())
     .build();
 
-    
-
-
     String requestBody = mapper.writeValueAsString(userCommonsToSend);
     String expectedReturn = mapper.writeValueAsString(correctuserCommons);
 
@@ -196,7 +193,6 @@ public void test_BuyCow_commons_exists() throws Exception {
     String responseString = response.getResponse().getContentAsString();
     assertEquals(expectedReturn, responseString);
 }
-
 
 @WithMockUser(roles = { "USER" })
 @Test
@@ -237,9 +233,6 @@ public void test_SellCow_commons_exists() throws Exception {
     .totalWealth(300+randomCommons.getCowPrice())
     .build();
 
-    
-
-
     String requestBody = mapper.writeValueAsString(userCommonsToSend);
     String expectedReturn = mapper.writeValueAsString(correctuserCommons);
 
@@ -259,6 +252,193 @@ public void test_SellCow_commons_exists() throws Exception {
     verify(userCommonsRepository, times(1)).save(correctuserCommons);
     String responseString = response.getResponse().getContentAsString();
     assertEquals(expectedReturn, responseString);
+}
+
+@WithMockUser(roles = { "USER" })
+@Test
+public void test_BuyCow_commons_for_user_DOES_NOT_exist() throws Exception {
+
+    // arrange
+
+    UserCommons origUserCommons = UserCommons
+    .builder()
+    .id(1L)
+    .userId(1L)
+    .commonsId(1L)
+    .totalWealth(300)
+    .build();
+
+    Commons randomCommons = Commons
+    .builder()
+    .name("test commons")
+    .cowPrice(10)
+    .milkPrice(2)
+    .startingBalance(300)
+    .startingDate(LocalDateTime.now())
+    .build();
+
+    UserCommons userCommonsToSend = UserCommons
+    .builder()
+    .id(1L)
+    .userId(1L)
+    .commonsId(1L)
+    .totalWealth(300)
+    .build();
+
+    UserCommons correctuserCommons = UserCommons
+    .builder()
+    .id(1L)
+    .userId(1L)
+    .commonsId(1L)
+    .totalWealth(300-randomCommons.getCowPrice())
+    .build();
+
+    String requestBody = mapper.writeValueAsString(userCommonsToSend);
+    String expectedReturn = mapper.writeValueAsString(correctuserCommons);
+
+    when(userCommonsRepository.findByCommonsIdAndUserId(eq(1L), eq(1L))).thenReturn(Optional.of(origUserCommons));
+    when(commonsRepository.findById(eq(234L))).thenReturn(Optional.of(randomCommons));
+
+    // act
+    MvcResult response = mockMvc.perform(put("/api/usercommons/buy?commonsId=234") 
+        .contentType(MediaType.APPLICATION_JSON)
+                    .characterEncoding("utf-8")
+                    .content(requestBody)
+                    .with(csrf()))
+            .andExpect(status().is(404)).andReturn();
+
+    // assert
+   
+    String responseString = response.getResponse().getContentAsString();
+    String expectedString = "{\"message\":\"UserCommons with commonsId 234 and userId 1 not found\",\"type\":\"EntityNotFoundException\"}";
+    Map<String, Object> expectedJson = mapper.readValue(expectedString, Map.class);
+    Map<String, Object> jsonResponse = responseToJson(response);
+    assertEquals(expectedJson, jsonResponse);
+}
+
+@WithMockUser(roles = { "USER" })
+@Test
+public void test_SellCow_commons_for_usercommons_DOES_NOT_exist() throws Exception {
+
+    // arrange
+
+    UserCommons origUserCommons = UserCommons
+    .builder()
+    .id(1L)
+    .userId(1L)
+    .commonsId(1L)
+    .totalWealth(300)
+    .build();
+
+    Commons randomCommons = Commons
+    .builder()
+    .id(234L)
+    .name("test commons")
+    .cowPrice(10)
+    .milkPrice(2)
+    .startingBalance(300)
+    .startingDate(LocalDateTime.now())
+    .build();
+
+    UserCommons userCommonsToSend = UserCommons
+    .builder()
+    .id(1L)
+    .userId(1L)
+    .commonsId(1L)
+    .totalWealth(300)
+    .build();
+
+    UserCommons correctuserCommons = UserCommons
+    .builder()
+    .id(1L)
+    .userId(1L)
+    .commonsId(1L)
+    .totalWealth(300+randomCommons.getCowPrice())
+    .build();
+
+    String requestBody = mapper.writeValueAsString(userCommonsToSend);
+    String expectedReturn = mapper.writeValueAsString(correctuserCommons);
+
+    when(userCommonsRepository.findByCommonsIdAndUserId(eq(1L), eq(1L))).thenReturn(Optional.of(origUserCommons));
+    when(commonsRepository.findById(eq(234L))).thenReturn(Optional.of(randomCommons));
+
+    // act
+    MvcResult response = mockMvc.perform(put("/api/usercommons/sell?commonsId=234")
+        .contentType(MediaType.APPLICATION_JSON)
+                    .characterEncoding("utf-8")
+                    .content(requestBody)
+                    .with(csrf()))
+            .andExpect(status().is(404)).andReturn();
+
+    // assert
+    String responseString = response.getResponse().getContentAsString();
+    String expectedString = "{\"message\":\"UserCommons with commonsId 234 and userId 1 not found\",\"type\":\"EntityNotFoundException\"}";
+    Map<String, Object> expectedJson = mapper.readValue(expectedString, Map.class);
+    Map<String, Object> jsonResponse = responseToJson(response);
+    assertEquals(expectedJson, jsonResponse);
+}
+
+//tests for when the common itself doesn't exist
+
+@WithMockUser(roles = { "USER" })
+@Test
+public void test_SellCow_commons_DOES_NOT_exist() throws Exception {
+
+    // arrange
+
+    UserCommons origUserCommons = UserCommons
+    .builder()
+    .id(1L)
+    .userId(1L)
+    .commonsId(1L)
+    .totalWealth(300)
+    .build();
+
+    Commons randomCommons = Commons
+    .builder()
+    .name("test commons")
+    .cowPrice(10)
+    .milkPrice(2)
+    .startingBalance(300)
+    .startingDate(LocalDateTime.now())
+    .build();
+
+    UserCommons userCommonsToSend = UserCommons
+    .builder()
+    .id(1L)
+    .userId(1L)
+    .commonsId(1L)
+    .totalWealth(300)
+    .build();
+
+    UserCommons correctuserCommons = UserCommons
+    .builder()
+    .id(1L)
+    .userId(1L)
+    .commonsId(1L)
+    .totalWealth(300+randomCommons.getCowPrice())
+    .build();
+
+    String requestBody = mapper.writeValueAsString(userCommonsToSend);
+    String expectedReturn = mapper.writeValueAsString(correctuserCommons);
+
+    when(userCommonsRepository.findByCommonsIdAndUserId(eq(1L), eq(1L))).thenReturn(Optional.of(origUserCommons));
+    when(commonsRepository.findById(eq(1L))).thenReturn(Optional.of(randomCommons));
+
+    // act
+    MvcResult response = mockMvc.perform(put("/api/usercommons/sell?commonsId=222")
+        .contentType(MediaType.APPLICATION_JSON)
+                    .characterEncoding("utf-8")
+                    .content(requestBody)
+                    .with(csrf()))
+            .andExpect(status().is(404)).andReturn();
+
+    // assert
+    String responseString = response.getResponse().getContentAsString();
+    String expectedString = "{\"message\":\"Commons with id 222 not found\",\"type\":\"EntityNotFoundException\"}";
+    Map<String, Object> expectedJson = mapper.readValue(expectedString, Map.class);
+    Map<String, Object> jsonResponse = responseToJson(response);
+    assertEquals(expectedJson, jsonResponse);
 }
 
 @WithMockUser(roles = { "USER" })
@@ -297,78 +477,9 @@ public void test_BuyCow_commons_DOES_NOT_exist() throws Exception {
     .id(1L)
     .userId(1L)
     .commonsId(1L)
-    .totalWealth(300-randomCommons.getCowPrice())
-    .build();
-
-    
-
-
-    String requestBody = mapper.writeValueAsString(userCommonsToSend);
-    String expectedReturn = mapper.writeValueAsString(correctuserCommons);
-
-    when(userCommonsRepository.findByCommonsIdAndUserId(eq(1L), eq(1L))).thenReturn(Optional.of(origUserCommons));
-    when(commonsRepository.findById(eq(1L))).thenReturn(Optional.of(randomCommons));
-
-    // act
-    MvcResult response = mockMvc.perform(put("/api/usercommons/buy?commonsId=234") 
-        .contentType(MediaType.APPLICATION_JSON)
-                    .characterEncoding("utf-8")
-                    .content(requestBody)
-                    .with(csrf()))
-            .andExpect(status().is(404)).andReturn();
-
-    // assert
-   
-    String responseString = response.getResponse().getContentAsString();
-    String expectedString = "{\"message\":\"UserCommons with commonsId 234 and userId 1 not found\",\"type\":\"EntityNotFoundException\"}";
-    Map<String, Object> expectedJson = mapper.readValue(expectedString, Map.class);
-    Map<String, Object> jsonResponse = responseToJson(response);
-    assertEquals(expectedJson, jsonResponse);
-}
-
-
-@WithMockUser(roles = { "USER" })
-@Test
-public void test_SellCow_commons_DOES_NOTexist() throws Exception {
-
-    // arrange
-
-    UserCommons origUserCommons = UserCommons
-    .builder()
-    .id(1L)
-    .userId(1L)
-    .commonsId(1L)
-    .totalWealth(300)
-    .build();
-
-    Commons randomCommons = Commons
-    .builder()
-    .name("test commons")
-    .cowPrice(10)
-    .milkPrice(2)
-    .startingBalance(300)
-    .startingDate(LocalDateTime.now())
-    .build();
-
-    UserCommons userCommonsToSend = UserCommons
-    .builder()
-    .id(1L)
-    .userId(1L)
-    .commonsId(1L)
-    .totalWealth(300)
-    .build();
-
-    UserCommons correctuserCommons = UserCommons
-    .builder()
-    .id(1L)
-    .userId(1L)
-    .commonsId(1L)
     .totalWealth(300+randomCommons.getCowPrice())
     .build();
 
-    
-
-
     String requestBody = mapper.writeValueAsString(userCommonsToSend);
     String expectedReturn = mapper.writeValueAsString(correctuserCommons);
 
@@ -376,7 +487,7 @@ public void test_SellCow_commons_DOES_NOTexist() throws Exception {
     when(commonsRepository.findById(eq(1L))).thenReturn(Optional.of(randomCommons));
 
     // act
-    MvcResult response = mockMvc.perform(put("/api/usercommons/sell?commonsId=234")
+    MvcResult response = mockMvc.perform(put("/api/usercommons/buy?commonsId=222")
         .contentType(MediaType.APPLICATION_JSON)
                     .characterEncoding("utf-8")
                     .content(requestBody)
@@ -385,10 +496,9 @@ public void test_SellCow_commons_DOES_NOTexist() throws Exception {
 
     // assert
     String responseString = response.getResponse().getContentAsString();
-    String expectedString = "{\"message\":\"UserCommons with commonsId 234 and userId 1 not found\",\"type\":\"EntityNotFoundException\"}";
+    String expectedString = "{\"message\":\"Commons with id 222 not found\",\"type\":\"EntityNotFoundException\"}";
     Map<String, Object> expectedJson = mapper.readValue(expectedString, Map.class);
     Map<String, Object> jsonResponse = responseToJson(response);
     assertEquals(expectedJson, jsonResponse);
 }
-
 }
