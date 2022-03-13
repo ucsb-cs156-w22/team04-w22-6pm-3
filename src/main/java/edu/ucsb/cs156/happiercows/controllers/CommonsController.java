@@ -60,38 +60,6 @@ public class CommonsController extends ApiController {
     return ResponseEntity.ok().body(body);
   }
 
-  @ApiOperation(value = "Update a commons")
-  @PreAuthorize("hasRole('ROLE_ADMIN')")
-  @PutMapping("/update")
-  public ResponseEntity<String> updateCommons(
-    @ApiParam("commons identifier") @RequestParam long id,
-    @ApiParam("request body") @RequestBody CreateCommonsParams params
-  )
-  {
-    Optional<Commons> existing = commonsRepository.findById(id);
-
-    Commons updated;
-    HttpStatus status;
-
-    if (existing.isPresent()) {
-      updated = existing.get();
-      status = HttpStatus.NO_CONTENT;
-    } else {
-      updated = new Commons();
-      status = HttpStatus.CREATED;
-    }
-
-    updated.setName(params.getName());
-    updated.setCowPrice(params.getCowPrice());
-    updated.setMilkPrice(params.getMilkPrice());
-    updated.setStartingBalance(params.getStartingBalance());
-    updated.setStartingDate(params.getStartingDate());
-
-    commonsRepository.save(updated);
-
-    return ResponseEntity.status(status).build();
-  }
-
   @ApiOperation(value = "Get a specific commons")
   @PreAuthorize("hasRole('ROLE_USER')")
   @GetMapping("")
@@ -111,6 +79,8 @@ public class CommonsController extends ApiController {
     @ApiParam("request body") @RequestBody CreateCommonsParams params
     ) throws JsonProcessingException
   {
+    log.info("name={}", params.getName());
+
     Commons commons = Commons.builder()
       .name(params.getName())
       .cowPrice(params.getCowPrice())
@@ -121,6 +91,8 @@ public class CommonsController extends ApiController {
 
     Commons saved = commonsRepository.save(commons);
     String body = mapper.writeValueAsString(saved);
+
+    log.info("body={}", body);
 
     return ResponseEntity.ok().body(body);
   }
@@ -143,34 +115,19 @@ public class CommonsController extends ApiController {
       return ResponseEntity.ok().body(body);
     }
 
+    Commons joinedCommons = commonsRepository.findById(commonsId).orElseThrow( ()->new EntityNotFoundException(Commons.class, commonsId));
+    String body = mapper.writeValueAsString(joinedCommons);
+
     UserCommons uc = UserCommons.builder()
         .commonsId(commonsId)
         .userId(userId)
-        .totalWealth(0)
+        .totalWealth(joinedCommons.getStartingBalance())
+        .numOfCows(1)
         .build();
 
     userCommonsRepository.save(uc);
 
-    Commons joinedCommons = commonsRepository.findById(commonsId).orElseThrow( ()->new EntityNotFoundException(Commons.class, commonsId));
-    String body = mapper.writeValueAsString(joinedCommons);
     return ResponseEntity.ok().body(body);
-  }
-
-  @ApiOperation(value = "Delete a Commons")
-  @PreAuthorize("hasRole('ROLE_ADMIN')")
-  @DeleteMapping("")
-  public Object deleteCommons(
-          @ApiParam("id") @RequestParam Long id) {
-      
-      Commons foundCommons = commonsRepository.findById(id).orElseThrow( ()->new EntityNotFoundException(Commons.class, id));
- 
-      commonsRepository.deleteById(id);
-      userCommonsRepository.deleteAllByCommonsId(id);
-
-      String responseString = String.format("commons with id %d deleted", id);
-
-      return genericMessage(responseString);
-
   }
 
   @ApiOperation("Delete a user from a commons")

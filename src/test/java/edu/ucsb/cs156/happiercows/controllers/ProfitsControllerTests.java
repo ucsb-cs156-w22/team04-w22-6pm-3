@@ -186,9 +186,9 @@ public class ProfitsControllerTests extends ControllerTestCase {
 
     expectedProfits.add(p1);
     when(profitRepository.findAllByUserCommonsId(1L)).thenReturn(expectedProfits);
-    when(userCommonsRepository.findById(1L)).thenReturn(Optional.of(expectedUserCommons));
+    when(userCommonsRepository.findByCommonsIdAndUserId(2L, 1L)).thenReturn(Optional.of(expectedUserCommons));
 
-    MvcResult response = mockMvc.perform(get("/api/profits/all/commons?userCommonsId=1")).andDo(print()).andExpect(status().isOk()).andReturn();
+    MvcResult response = mockMvc.perform(get("/api/profits/all/commons?commonsId=2")).andDo(print()).andExpect(status().isOk()).andReturn();
 
     verify(profitRepository, times(1)).findAllByUserCommonsId(1L);
 
@@ -199,33 +199,34 @@ public class ProfitsControllerTests extends ControllerTestCase {
 
   @WithMockUser(roles = { "USER" })
   @Test
-  public void get_profits_all_commons_other_user() throws Exception {
+  public void get_profits_all_commons_user_nonexistent() throws Exception {
     List<Profit> expectedProfits = new ArrayList<Profit>();
-    UserCommons expectedUserCommons = UserCommons.builder().id(1).commonsId(2).userId(2).build();
+    UserCommons expectedUserCommons = UserCommons.builder().id(1).commonsId(2).userId(5).build();
     Profit p1 = Profit.builder().id(42).profit(100).timestamp(12).userCommons(expectedUserCommons).build();
 
     when(profitRepository.findAllByUserCommonsId(1L)).thenReturn(expectedProfits);
-    when(userCommonsRepository.findById(1L)).thenReturn(Optional.of(expectedUserCommons));
+    when(userCommonsRepository.findByCommonsIdAndUserId(2L, 1L)).thenReturn(Optional.empty());
 
-    MvcResult response = mockMvc.perform(get("/api/profits/all/commons?userCommonsId=1").contentType("application/json")).andExpect(status().isNotFound()).andReturn();
+    MvcResult response = mockMvc.perform(get("/api/profits/all/commons?commonsId=2").contentType("application/json")).andExpect(status().isNotFound()).andReturn();
 
-    verify(userCommonsRepository, times(1)).findById(1L);
+    verify(userCommonsRepository, times(1)).findByCommonsIdAndUserId(2L, 1L);
 
     Map<String, Object> json = responseToJson(response);
     assertEquals("EntityNotFoundException", json.get("type"));
-    assertEquals("UserCommons with id 1 not found", json.get("message"));
+    assertEquals("UserCommons with commonsId 2 and userId 1 not found", json.get("message"));
   }
 
   @WithMockUser(roles = { "USER" })
   @Test
   public void get_profits_all_commons_nonexistent() throws Exception {
-    MvcResult response = mockMvc.perform(get("/api/profits/all/commons?userCommonsId=1").contentType("application/json")).andExpect(status().isNotFound()).andReturn();
 
-    verify(userCommonsRepository, times(1)).findById(1L);
+    MvcResult response = mockMvc.perform(get("/api/profits/all/commons?commonsId=1").contentType("application/json")).andExpect(status().isNotFound()).andReturn();
+
+    verify(userCommonsRepository, times(1)).findByCommonsIdAndUserId(1L, 1L);
 
     Map<String, Object> json = responseToJson(response);
     assertEquals("EntityNotFoundException", json.get("type"));
-    assertEquals("UserCommons with id 1 not found", json.get("message"));
+    assertEquals("UserCommons with commonsId 2 and userId 1 not found", json.get("message"));
   }
 
   @WithMockUser(roles = { "ADMIN" })
