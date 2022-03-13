@@ -11,6 +11,7 @@ import Profits from "main/components/Commons/Profits";
 import { useBackend } from "main/utils/useBackend";
 import { useBackendMutation } from "main/utils/useBackend";
 import { toast } from "react-toastify"
+import Background from "../../assets/PlayPageBackground.png";
 
 export default function PlayPage() {
 
@@ -39,6 +40,18 @@ export default function PlayPage() {
         url: "/api/commons",
         params: {
           id: commonsId
+        }
+      }
+    );
+    const { data: userCommonsProfits, error: userCommonsProfitsError, status: userCommonsProfitsStatus } =
+    useBackend(
+      // Stryker disable next-line all : don't test internal caching of React Query
+      [`/api/profits/all/commons?userCommonsId=${commonsId}`],
+      {  // Stryker disable next-line all : GET is the default, so changing this to "" doesn't introduce a bug
+        method: "GET",
+        url: "/api/profits/all/commons",
+        params: {
+          userCommonsId: commonsId
         }
       }
     );
@@ -97,20 +110,21 @@ const onSell = (userCommons) => {
 };
 
   return (
-    
-    <BasicLayout >
-      <Container >
-        { !!currentUser &&  <CommonsPlay currentUser={currentUser} /> }
-        { !!commons && <CommonsOverview commons={commons} />}
-        <br />
-        { !!userCommons &&
-          <CardGroup >
-            <ManageCows userCommons={userCommons} onBuy={onBuy} onSell={onSell} />
-            <FarmStats userCommons={userCommons} />
-            <Profits userCommons={userCommons} />
-          </CardGroup>
-        }
-      </Container>
-    </BasicLayout>
+    <div style={{ backgroundSize: 'cover', backgroundImage: `url(${Background})` }}>
+      <BasicLayout >
+        <Container >
+          { !!currentUser &&  <CommonsPlay currentUser={currentUser} /> }
+          { !!commons && <CommonsOverview commons={commons} />}
+          <br />
+          { !!userCommons &&
+            <CardGroup >
+              <ManageCows userCommons={userCommons} commons={commons} onBuy={onBuy} onSell={onSell} />
+              <FarmStats userCommons={userCommons} />
+              <Profits userCommons={userCommons} profits={userCommonsProfits} />
+            </CardGroup>
+          }
+        </Container>
+      </BasicLayout>
+    </div>
   )
 }
