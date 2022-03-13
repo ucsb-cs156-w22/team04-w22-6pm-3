@@ -121,63 +121,6 @@ public class CommonsControllerTests extends ControllerTestCase {
     assertEquals(actualCommons, expectedCommons);
   }
 
-  @WithMockUser(roles = { "ADMIN" })
-  @Test
-  public void updateCommonsTest() throws Exception
-  {
-    LocalDateTime someTime = LocalDateTime.parse("2022-03-05T15:50:10");
-
-    CreateCommonsParams parameters = CreateCommonsParams.builder()
-      .name("Jackson's Commons")
-      .cowPrice(500.99)
-      .milkPrice(8.99)
-      .startingBalance(1020.10)
-      .startingDate(someTime)
-      .build();
-
-    Commons commons = Commons.builder()
-      .name("Jackson's Commons")
-      .cowPrice(500.99)
-      .milkPrice(8.99)
-      .startingBalance(1020.10)
-      .startingDate(someTime)
-      .build();
-
-    String requestBody = objectMapper.writeValueAsString(parameters);
-
-    when(commonsRepository.save(commons))
-      .thenReturn(commons);
-
-    mockMvc
-      .perform(put("/api/commons/update?id=0").with(csrf())
-        .contentType(MediaType.APPLICATION_JSON)
-        .characterEncoding("utf-8")
-        .content(requestBody))
-      .andExpect(status().isCreated());
-
-    verify(commonsRepository, times(1)).save(commons);
-
-    parameters.setMilkPrice(parameters.getMilkPrice() + 3.00);
-    commons.setMilkPrice(parameters.getMilkPrice());
-
-    requestBody = objectMapper.writeValueAsString(parameters);
-
-    when(commonsRepository.findById(0L))
-      .thenReturn(Optional.of(commons));
-
-    when(commonsRepository.save(commons))
-      .thenReturn(commons);
-
-    mockMvc
-      .perform(put("/api/commons/update?id=0").with(csrf())
-        .contentType(MediaType.APPLICATION_JSON)
-        .characterEncoding("utf-8")
-        .content(requestBody))
-      .andExpect(status().isNoContent());
-
-    verify(commonsRepository, times(1)).save(commons);
-  }
-
   //This common SHOULD be in the repository
   @WithMockUser(roles = { "USER" })
   @Test
@@ -229,6 +172,7 @@ public class CommonsControllerTests extends ControllerTestCase {
         .userId(1L)
         .commonsId(2L)
         .totalWealth(0)
+        .numOfCows(1)
         .build();
 
     UserCommons ucSaved = UserCommons.builder()
@@ -352,7 +296,6 @@ public class CommonsControllerTests extends ControllerTestCase {
         .andExpect(status().is(404)).andReturn();
 
     verify(userCommonsRepository, times(1)).findByCommonsIdAndUserId(2L, 1L);
-    verify(userCommonsRepository, times(1)).save(uc);
 
     Map<String, Object> responseMap = responseToJson(response);
 
@@ -360,61 +303,9 @@ public class CommonsControllerTests extends ControllerTestCase {
     assertEquals(responseMap.get("type"), "EntityNotFoundException");
   }
 
-    @WithMockUser(roles = { "ADMIN" })
-  @Test
-  public void deleteCommons_test_admin_exists() throws Exception {
-      LocalDateTime someTime = LocalDateTime.parse("2022-03-05T15:50:10");
-      Commons c = Commons.builder()
-        .name("Jackson's Commons")
-        .cowPrice(500.99)
-        .milkPrice(8.99)
-        .startingBalance(1020.10)
-        .startingDate(someTime)
-        .build();
-      
-      when(commonsRepository.findById(eq(2L))).thenReturn(Optional.of(c));
-      doNothing().when(commonsRepository).deleteById(2L);
-      
-      MvcResult response = mockMvc.perform(
-              delete("/api/commons?id=2")
-                      .with(csrf()))
-              .andExpect(status().is(200)).andReturn();
-      
-      verify(commonsRepository, times(1)).findById(2L);
-      verify(commonsRepository, times(1)).deleteById(2L);
-      
-      String responseString = response.getResponse().getContentAsString();
-      
-      String expectedString = "{\"message\":\"commons with id 2 deleted\"}"; 
 
-      assertEquals(expectedString, responseString);
-  }
 
   @WithMockUser(roles = { "ADMIN" })
-  @Test
-  public void deleteCommons_test_admin_nonexists() throws Exception {
-      
-      when(commonsRepository.findById(eq(2L))).thenReturn(Optional.empty());
-      
-      MvcResult response = mockMvc.perform(
-              delete("/api/commons?id=2")
-                      .with(csrf()))
-              .andExpect(status().is(404)).andReturn();
-      
-      verify(commonsRepository, times(1)).findById(2L);
-      
-
-      String responseString = response.getResponse().getContentAsString();
-      
-      String expectedString = "{\"message\":\"Commons with id 2 not found\",\"type\":\"EntityNotFoundException\"}";
-      
-      Map<String, Object> expectedJson = mapper.readValue(expectedString, Map.class);
-      Map<String, Object> jsonResponse = responseToJson(response);
-      assertEquals(expectedJson, jsonResponse);
-  }
-  
-  
-  @WithMockUser(roles = {"ADMIN"})
   @Test
   public void deleteUserFromCommonsTest() throws Exception {
     UserCommons uc = UserCommons.builder()
