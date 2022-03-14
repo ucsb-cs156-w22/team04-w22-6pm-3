@@ -69,12 +69,12 @@ public class UserCommonsController extends ApiController {
     return userCommons;
   }
 
-    @ApiOperation(value = "Buy a cow, totalWealth updated")
+  @ApiOperation(value = "Buy a cow, totalWealth updated")
   @PreAuthorize("hasRole('ROLE_USER')")
   @PutMapping("/buy")
   public ResponseEntity<String> putUserCommonsByIdBuy(
-          @ApiParam("commonsId") @RequestParam Long commonsId, 
-            @RequestBody @Valid UserCommons incomingUserCommons) throws JsonProcessingException {
+          @ApiParam("commonsId") @RequestParam Long commonsId) throws JsonProcessingException {
+        
         User u = getCurrentUser().getUser();
         Long userId = u.getId();
 
@@ -84,25 +84,21 @@ public class UserCommonsController extends ApiController {
         .orElseThrow(
             () -> new EntityNotFoundException(UserCommons.class, "commonsId", commonsId, "userId", userId));
 
-        
-        long previousId = userCommons.getId();
-        incomingUserCommons.setId(previousId);
-        if(incomingUserCommons.getTotalWealth() >= commons.getCowPrice() ){
-          incomingUserCommons.setTotalWealth(incomingUserCommons.getTotalWealth() - commons.getCowPrice());
-          incomingUserCommons.setNumOfCows(incomingUserCommons.getNumOfCows() + 1);
+        if(userCommons.getTotalWealth() >= commons.getCowPrice() ){
+          userCommons.setTotalWealth(userCommons.getTotalWealth() - commons.getCowPrice());
+          userCommons.setNumOfCows(userCommons.getNumOfCows() + 1);
         }
-        userCommonsRepository.save(incomingUserCommons);
+        userCommonsRepository.save(userCommons);
         
-        String body = mapper.writeValueAsString(incomingUserCommons);
+        String body = mapper.writeValueAsString(userCommons);
         return ResponseEntity.ok().body(body);
     }
 
-      @ApiOperation(value = "Sell a cow, totalWealth updated")
+  @ApiOperation(value = "Sell a cow, totalWealth updated")
   @PreAuthorize("hasRole('ROLE_USER')")
   @PutMapping("/sell")
   public ResponseEntity<String> putUserCommonsByIdSell(
-          @ApiParam("commonsId") @RequestParam Long commonsId, 
-            @RequestBody @Valid UserCommons incomingUserCommons) throws JsonProcessingException {
+          @ApiParam("commonsId") @RequestParam Long commonsId) throws JsonProcessingException {
         User u = getCurrentUser().getUser();
         Long userId = u.getId();
 
@@ -113,15 +109,13 @@ public class UserCommonsController extends ApiController {
             () -> new EntityNotFoundException(UserCommons.class, "commonsId", commonsId, "userId", userId));
 
 
-        long previousId = userCommons.getId();
-        incomingUserCommons.setId(previousId);
-        if(incomingUserCommons.getNumOfCows() >= 1 ){
-          incomingUserCommons.setTotalWealth(incomingUserCommons.getTotalWealth() + commons.getCowPrice());
-          incomingUserCommons.setNumOfCows(incomingUserCommons.getNumOfCows() - 1);
+        if(userCommons.getNumOfCows() >= 1 ){
+          userCommons.setTotalWealth(userCommons.getTotalWealth() + commons.getCowPrice());
+          userCommons.setNumOfCows(userCommons.getNumOfCows() - 1);
         }
-        userCommonsRepository.save(incomingUserCommons);
+        userCommonsRepository.save(userCommons);
         
-        String body = mapper.writeValueAsString(incomingUserCommons);
+        String body = mapper.writeValueAsString(userCommons);
         return ResponseEntity.ok().body(body);
     }
 }
