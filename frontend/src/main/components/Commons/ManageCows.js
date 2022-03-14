@@ -3,7 +3,7 @@ import { Card, _Image, Button, Row, Col} from "react-bootstrap";
 import cowHead from "./../../../assets/CowHead.png"; 
 
 // add parameters 
-const ManageCows = ({userCommons, commons, onBuy, onSell}) =>  {
+const ManageCows = ({userCommons,commons, onBuy, onSell}) =>  {
     // update cowPrice from fixture
     return (
         <Card>
@@ -19,17 +19,18 @@ const ManageCows = ({userCommons, commons, onBuy, onSell}) =>  {
                         </Card.Text>
                     </Col>
                     <Col>
-                        <Button variant="outline-danger" onClick={()=>{onBuy(userCommons)}} data-testid={"buy-cow-button"}>Buy cow</Button>
+                        <Button variant="outline-danger" onClick={()=>{onBuy(userCommons)}} data-testid={"buy-cow-button"}>+</Button>
                         <br/>
                         <br/>
-                        <Button variant="outline-danger" onClick={()=>{onSell(userCommons)}} data-testid={"sell-cow-button"}>Sell cow</Button>
+                        <Button variant="outline-danger" onClick={()=>{onSell(userCommons)}} data-testid={"sell-cow-button"}>-</Button>
                         <br/>
                         <br/>
                     </Col>
                 </Row>
-                    Note: Buying cows buys at current cow price, but selling cows sells at current cow price
-                    times the average health of cows as a percentage! 
-
+          
+                    Note: If you increase cows, they will be automatically bought, and if you decrease, 
+                    the cows will be sold for the current cow price, time the health of that cow (as a percentage). 
+        
         </Card.Body>
         </Card>
     ); 

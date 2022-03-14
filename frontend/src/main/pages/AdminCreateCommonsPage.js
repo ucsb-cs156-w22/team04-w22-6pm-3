@@ -22,7 +22,7 @@ const AdminCreateCommonsPage = () => {
         toast(`Commons successfully created! - id: ${commons.id} name: ${commons.name} startDate: ${commons.startingDate} cowPrice ${commons.milkPrice}`);
         console.log(commons.milkPrice);
     }
-
+   
     const mutation = useBackendMutation(
         objectToAxiosParams,
         { onSuccess },
